@@ -4,10 +4,21 @@ const app = express()
 
 // Use the express Router object
 const router = express.Router()
+const pies = [
+  { 'id': 1, 'name': 'Apple' },
+  { 'id': 2, 'name': 'Cherry' },
+  { 'id': 3, 'name': 'Peach' },
+]
 
 // Create GET to return a list of all pies
 router.get('/', function (req, res, next) {
-  res.send('Orange')
+  // res.status(200).send(pies)
+  res.status(200).json({
+    'status': 200,
+    'statusText': 'OK',
+    'message': 'All pies retrieved.',
+    'data': pies
+  })
 })
 
 // Configure router so all routes are prefixed with /api/v1
