@@ -6,17 +6,30 @@ const pieRepo = require('./repos/pieRepo')
 
 // Use the express Router object
 const router = express.Router()
-const pies = pieRepo.get()
+// const pies = pieRepo.get()
 
 // Create GET to return a list of all pies
 router.get('/', function (req, res, next) {
   // res.status(200).send(pies)
-  res.status(200).json({
-    'status': 200,
-    'statusText': 'OK',
-    'message': 'All pies retrieved.',
-    'data': pies
+
+  // res.status(200).json({
+  //   'status': 200,
+  //   'statusText': 'OK',
+  //   'message': 'All pies retrieved.',
+  //   'data': pies
+  // })
+
+  pieRepo.get(function (data) {
+    res.status(200).json({
+      'status': 200,
+      'statusText': 'OK',
+      'message': 'All pies retrieved.',
+      'data': data
+    })
+  }, function (err) {
+    next(err)
   })
+
 })
 
 // Configure router so all routes are prefixed with /api/v1
