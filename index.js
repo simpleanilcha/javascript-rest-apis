@@ -2,13 +2,11 @@
 const express = require('express')
 const app = express()
 
+const pieRepo = require('./repos/pieRepo')
+
 // Use the express Router object
 const router = express.Router()
-const pies = [
-  { 'id': 1, 'name': 'Apple' },
-  { 'id': 2, 'name': 'Cherry' },
-  { 'id': 3, 'name': 'Peach' },
-]
+const pies = pieRepo.get()
 
 // Create GET to return a list of all pies
 router.get('/', function (req, res, next) {
