@@ -181,17 +181,41 @@ router.patch('/:id', function (req, res, next) {
 // Configure router so all routes are prefixed with /api/v1
 app.use('/api/', router)
 
-// Configure exception middleware last
-app.use(function (err, req, res, next) {
-  res.status(500).json({
+// ERROR
+function errorBuilder(err) {
+  return {
     'status': 500,
     'statusText': 'Internal Server Error',
     'message': err.message,
     'error': {
+      'errno': err.errno,
+      'call': err.syscall,
       'code': 'INTERNAL_SERVER_ERROR',
       'message': err.message
     }
-  })
+  }
+}
+
+// Configure exception logger
+app.use(function (err, req, res, next) {
+  console.log(errorBuilder(err))
+  next(arr)
+})
+
+// Configure exception middleware last
+app.use(function (err, req, res, next) {
+
+  res.status(500).json(errorBuilder(err))
+
+  // res.status(500).json({
+  //   'status': 500,
+  //   'statusText': 'Internal Server Error',
+  //   'message': err.message,
+  //   'error': {
+  //     'code': 'INTERNAL_SERVER_ERROR',
+  //     'message': err.message
+  //   }
+  // })
 })
 
 // Create server to listen on port 5000
