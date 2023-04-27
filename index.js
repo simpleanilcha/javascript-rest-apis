@@ -1,12 +1,14 @@
 // Bring in the express server and create application
 const express = require('express')
 const app = express()
-
 const pieRepo = require('./repos/pieRepo')
 
 // Use the express Router object
 const router = express.Router()
 // const pies = pieRepo.get()
+
+// Configure middleware to support JSON data parsing in request object
+app.use(express.json())
 
 // Create GET to return a list of all pies
 router.get('/', function (req, res, next) {
@@ -76,6 +78,20 @@ router.get('/:id', function (req, res, next) {
     next(err)
   })
 
+})
+
+// POST
+router.post('/', function (req, res, next) {
+  pieRepo.insert(req.body, function (data) {
+    res.status(201).json({
+      'status': 201,
+      'statusText': 'Created',
+      'message': 'New Pie Added.',
+      'data': data
+    })
+  }, function (err) {
+    next(err)
+  })
 })
 
 // Configure router so all routes are prefixed with /api/v1
