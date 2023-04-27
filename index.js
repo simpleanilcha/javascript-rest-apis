@@ -5,7 +5,6 @@ const pieRepo = require('./repos/pieRepo')
 
 // Use the express Router object
 const router = express.Router()
-// const pies = pieRepo.get()
 
 // Configure middleware to support JSON data parsing in request object
 app.use(express.json())
@@ -181,6 +180,19 @@ router.patch('/:id', function (req, res, next) {
 
 // Configure router so all routes are prefixed with /api/v1
 app.use('/api/', router)
+
+// Configure exception middleware last
+app.use(function (err, req, res, next) {
+  res.status(500).json({
+    'status': 500,
+    'statusText': 'Internal Server Error',
+    'message': err.message,
+    'error': {
+      'code': 'INTERNAL_SERVER_ERROR',
+      'message': err.message
+    }
+  })
+})
 
 // Create server to listen on port 5000
 const server = app.listen(5000, function () {
